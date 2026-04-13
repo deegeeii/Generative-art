@@ -32,6 +32,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:3000",  # Create React App default port
         "http://localhost:5173",  # Vite default port (what we're using)
+        "https://generative-art-ten.vercel.app",  # Production frontend
     ],
     allow_credentials=True,
     allow_methods=["*"],   # Allow GET, POST, etc.
