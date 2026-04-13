@@ -3,6 +3,8 @@
 # FastAPI is a modern Python web framework that lets us create API endpoints.
 # An API endpoint is just a URL that the frontend can send requests to.
 
+import anthropic
+import json
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -66,6 +68,9 @@ class PaletteRequest(BaseModel):
     mood: Optional[str] = None   # e.g. "calm", "energetic", "dark"
     seed: Optional[int] = None
 
+# AI prompt request (Claude)
+class PromptRequest(BaseModel):
+    prompt: str  # e.g. "stormy ocean at midnight" "cherry blossom storm"
 
 # --- Endpoints ---
 
@@ -74,6 +79,73 @@ class PaletteRequest(BaseModel):
 def root():
     return {"message": "Generative Art Studio API is running"}
 
+@app.post("/ai-prompt")
+def ai_prompt(req: PromptRequest):
+    # Createe the Anthropic client
+    # It automatically reads ANTHROPIC_API_KEY from you environment
+    client = anthropic.Anthropic()
+
+    # Ask Claude to translate the prompt into art params
+    response = client.messages.create(
+        model="claude-opus-4-6",
+        max_tokens=500,
+        system="""You are an art parameter generator for a generative art app.
+        Given a text description, respond with ONLY a valid JSON object.
+        
+        Available algorithms:
+        - flow_field: organic flowing particles (use for: nature, emotion, water, wind)
+        - fractal: Mandelbrot set (use for: cosmic, infinite, geometric, complex)
+        - geometric: layered shapes (use for: bold, modern, minimal, architectural)
+        
+        Return this exact JSON structure:
+        {
+            "mode": "flow_field",
+            "colors": ["#hex1", "#hex2", "#hex3", "#hex4", "#hex5"],
+            "num_particles": 1500,
+            "steps": 80,
+            "zoom": 1.0,
+            "max_iter": 100,
+            "num_shapes": 60
+        }
+        
+        Choose the mode, colors, and parameters that best match description.
+        Respond with ONLY the JSON - no explanation, no markdown.""",
+        messages=[
+            {"role": "user", "content": req.prompt}
+        ]
+    )
+    # Claude's response text contains the JSON
+    params = json.loads(response.content[0].text)
+
+    # Use those parameters to generate the art
+    mode = params.get("mode", "flow_field")
+    colors = params.get("colors", None)
+
+    if mode == "flow_field":
+        image_data = generate_flow_field(
+            colors=colors,
+            num_particles=params.get("num_particles", 1500),
+            steps=params.get("steps", 80),
+        )
+    elif mode == "fractal":
+        image_data = generate_fractal(
+            colors=colors,
+            zoom=params.get("zoom", 1.0),
+            max_iter=params.get("max_iter", 100),
+        )
+    elif mode == "geometric":
+        image_data = generate_geometric(
+            colors=colors,
+            num_shapes=params.get("num_shapes", 60),
+        )
+    else:
+        return {"error": "Uknown mode from AI"}
+    
+    return {
+        "image": image_data,
+        "mode": mode,
+        "params": params    # send params back so the UI can show what Claude chose
+    }
 
 # POST /generate
 # The frontend sends art parameters, and we return a base64-encoded PNG image.

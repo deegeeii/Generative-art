@@ -38,91 +38,60 @@ function Controls({ onGenerate }) {
 
     return (
         <div>
-            {/* Algorithm dropdown — always visible */}
+            <h2>Controls</h2>
+            <label>Algorithm</label>
             <select value={algorithm} onChange={(e) => setAlgorithm(e.target.value)}>
                 <option value="flow_field">Flow Field</option>
                 <option value="fractal">Fractal</option>
                 <option value="geometric">Geometric</option>
             </select>
-
-            {/* Flow field sliders — only show when flow_field is selected */}
+    
             {algorithm === 'flow_field' && (
                 <div>
                     <label>Particles: {numParticles}</label>
-                    <input
-                        type="range"
-                        min="100"
-                        max="3000"
-                        value={numParticles}
-                        onChange={(e) => setNumParticles(Number(e.target.value))}
-                    />
+                    <input type="range" min="100" max="3000" value={numParticles}
+                        onChange={(e) => setNumParticles(Number(e.target.value))} />
                     <label>Steps: {steps}</label>
-                    <input
-                        type="range"
-                        min="10"
-                        max="200"
-                        value={steps}
-                        onChange={(e) => setSteps(Number(e.target.value))}
-                    />
+                    <input type="range" min="10" max="200" value={steps}
+                        onChange={(e) => setSteps(Number(e.target.value))} />
                 </div>
             )}
-
-            {/* Fractal sliders — only show when fractal is selected */}
+    
             {algorithm === 'fractal' && (
                 <div>
                     <label>Zoom: {zoom}</label>
-                    <input
-                        type="range"
-                        min="1"
-                        max="50"
-                        step="0.5"
-                        value={zoom}
-                        onChange={(e) => setZoom(Number(e.target.value))}
-                    />
+                    <input type="range" min="1" max="50" step="0.5" value={zoom}
+                        onChange={(e) => setZoom(Number(e.target.value))} />
                     <label>Detail: {maxIter}</label>
-                    <input
-                        type="range"
-                        min="20"
-                        max="500"
-                        value={maxIter}
-                        onChange={(e) => setMaxIter(Number(e.target.value))}
-                    />
+                    <input type="range" min="20" max="500" value={maxIter}
+                        onChange={(e) => setMaxIter(Number(e.target.value))} />
                 </div>
             )}
-
-            {/* Palette picker — always visible */}
-            <div>
-                <select value={mood} onChange={(e) => setMood(e.target.value)}>
-                    <option value="calm">Calm</option>
-                    <option value="energetic">Energetic</option>
-                    <option value="dark">Dark</option>
-                    <option value="nature">Nature</option>
-                    <option value="sunset">Sunset</option>
-                    <option value="ocean">Ocean</option>
-                    <option value="neon">Neon</option>
-                    <option value="minimal">Minimal</option>
-                </select>
-                <button onClick={handlePalette}>Get Palette</button>
+    
+            <label>Color Mood</label>
+            <select value={mood} onChange={(e) => setMood(e.target.value)}>
+                <option value="calm">Calm</option>
+                <option value="energetic">Energetic</option>
+                <option value="dark">Dark</option>
+                <option value="nature">Nature</option>
+                <option value="sunset">Sunset</option>
+                <option value="ocean">Ocean</option>
+                <option value="neon">Neon</option>
+                <option value="minimal">Minimal</option>
+            </select>
+    
+            <div className="btn-row">
+                <button className="btn-secondary" onClick={handlePalette}>Get Palette</button>
+                <button className="btn-primary" onClick={handleGenerate}>Generate</button>
             </div>
-
-            {/* Color swatches — only show once a palette has been fetched */}
+    
             {palette && (
-                <div>
+                <div className="swatches">
                     {palette.map((color, index) => (
-                        <div
-                            key={index}
-                            style={{
-                                backgroundColor: color,
-                                width: '40px',
-                                height: '40px',
-                                display: 'inline-block'
-                            }}
-                        />
+                        <div key={index} className="swatch" style={{ backgroundColor: color }} />
                     ))}
                 </div>
             )}
-            {/* Generate button — always visible */}
-            <button onClick={handleGenerate}>Generate</button>
         </div>
     )
 }
