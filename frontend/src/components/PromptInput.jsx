@@ -10,7 +10,7 @@ function PromptInput({ onGenerate }) {
         if (!prompt) return
         setLoading(true)
 
-        const response = await fetch('http://localhost:8000/ai-prompt', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/ai-prompt`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ prompt: prompt })

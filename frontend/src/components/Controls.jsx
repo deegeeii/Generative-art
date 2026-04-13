@@ -10,7 +10,7 @@ function Controls({ onGenerate }) {
     const [palette, setPalette] = useState(null)
 
     async function handleGenerate() {
-        const response = await fetch('http://localhost:8000/generate', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/generate`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -27,7 +27,7 @@ function Controls({ onGenerate }) {
     }
 
     async function handlePalette() {
-        const response = await fetch('http://localhost:8000/palette', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/palette`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ mood: mood })
