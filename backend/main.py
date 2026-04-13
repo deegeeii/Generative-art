@@ -29,15 +29,10 @@ app = FastAPI(title="Generative Art Studio API")
 # This middleware tells the server: "It's okay to accept requests from our React app."
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",  # Create React App default port
-        "http://localhost:5173",  # Vite default port (what we're using)
-    ],
-    # Matches all Vercel preview and production deployments automatically
-    allow_origin_regex=r"https://.*\.vercel\.app",
-    allow_credentials=True,
-    allow_methods=["*"],   # Allow GET, POST, etc.
-    allow_headers=["*"],   # Allow any request headers
+    allow_origins=["*"],  # Allow all origins (fine for a portfolio project)
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 
