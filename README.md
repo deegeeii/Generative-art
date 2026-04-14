@@ -4,6 +4,8 @@ A full-stack generative art web app built with React, Python, and Claude AI. Des
 
 ![Generative Art Studio](https://img.shields.io/badge/Stack-React%20%7C%20FastAPI%20%7C%20Claude-7c6ff7)
 
+**Live demo:** https://generative-art-ten.vercel.app
+
 ---
 
 ## Features
