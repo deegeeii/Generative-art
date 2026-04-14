@@ -29,7 +29,7 @@ app = FastAPI(title="Generative Art Studio API")
 # This middleware tells the server: "It's okay to accept requests from our React app."
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins (fine for a portfolio project)
+    allow_origins=["*"],  # Allow all origins — fine for a public portfolio project
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
